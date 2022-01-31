@@ -21,12 +21,24 @@ fn encrypt_mnemonic(mnemonic: &str) {
     return (key_and_nonce, encrypted_mnemonic);
 }
 
-fn create_key_shares(secret: &[u8], n: u8, k: u8) {
-    return create_shares(secret, n, k);
+fn create_key_shares(secret: &[u8], n: u8, k: u8) -> Vector<Vector<u8>> {
+    let shares = create_shares(secret, n, k);
+    match (shares) {
+        Ok(shares) => return shares,
+        Err(err) => panic!("Oh no! Something went wrong in create_key_shares: {}", err)
+    }
 }
 
 fn encrypt_share(share: &[u8], pub_key: &[u8]) {
     let mut rng = rand::thread_rng();
     let key = RsaPublicKey::from_pkcs1_der(pub_key);
     return key.encrypt(&mut rng, PaddingScheme::new_pkcs1v15(), &share[..]);
+}
+
+fn convertHashToBytes(hash: H160) {
+    return hash.as_bytes();
+}
+
+fn encrypt_shares(shares: Vector<Vector<u8>>, pub_keys: Vector<H160>) {
+    return 
 }

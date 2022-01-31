@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 aes-gcm = "0.9.4"
 shamirsecretsharing = "0.1.5"
+web3 = "0.17.0"
