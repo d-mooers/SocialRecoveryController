@@ -4,15 +4,19 @@ This handles the client-side work for a social recovery system.
 
 ## Social Recovery Algorithm
 
+### Backup Process:
+
 ```
-Backup Process:
     1. Encrypt a mnemonic phrase using AES encryption, with a 52-byte key and 12-byte nonce both randomly generated.
     2. Combine the 52-byte key and 12-byte nonce to create a 64-byte secret that is [key][nonce].
     3. Use Shamir secret-sharing to create N shares of the 64-byte secret with a threshold k
     4. Query each guardian's public key, and use RSA encryption to encrypt the ith key with the public key of the ith guardian
     5. Post the encrypted mnemonic, threshold k, guardian public keys, and encrypted secret shares onchain.
+```
 
-Recovery Process (Perspective of Recovering User):
+### Recovery Process (Perspective of Recovering User):
+
+```
     1. Create a new EOA, A
     2. Enter account into recovery mode
     3. Recieve text to confirm from Twilio
@@ -24,16 +28,22 @@ Recovery Process (Perspective of Recovering User):
     9. Decrypt the k keyshares, and retrieve the original secret
     10. Split the 64-byte secret into a 52-byte key and 12-byte nonce
     11. Decrypt the mnemonic using the key and nonce
+```
 
-Recovery Process (Perspective of Guardian):
+### Recovery Process (Perspective of Guardian):
+
+```
     1. Recieve notification that action is required
     2. Confirm identity of requesting EOA
     3. encrypted_share <- Grab encrypted keyshare from chain
     4. decrypted_share <- Decrypt encrypted_share using private key
     5. new_share <- Encrypt decrypted_share using public key of requesting EOA
     6. Post new_share on chain
+```
 
-Recovery Process (Case of Malicious Actor):
+### Recovery Process (Case of Malicious Actor):
+
+```
     1. Malicious actor B puts account A into recovery
     2. Smart contract emits RecoveryEntered event
     3. Hosted services detects event emission and parses account A's address from onchain
