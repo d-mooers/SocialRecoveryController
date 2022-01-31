@@ -40,5 +40,5 @@ Recovery Process (Case of Malicious Actor):
     4. Account A's phone number is queried from onchain data
     5. Account A receives notification text
     6. Account A notifies that they are not trying to recover account
-    7. Account A taken out of reovery mode, recieves a 7-day locking period, and B is banned from ever putting A into recovery mode
+    7. Account A taken out of recovery mode, recieves a 7-day locking period, and B is banned from ever putting A into recovery mode
 ```
