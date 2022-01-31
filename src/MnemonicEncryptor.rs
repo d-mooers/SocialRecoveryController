@@ -40,5 +40,5 @@ fn convertHashToBytes(hash: H160) {
 }
 
 fn encrypt_shares(shares: Vector<Vector<u8>>, pub_keys: Vector<H160>) {
-    return 
+    return shares.iter().zip(pub_keys.iter()).map(|(&s, &k)| encrypt_share(s, convertHashToBytes(k)));
 }
