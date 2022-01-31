@@ -1,9 +1,10 @@
 use shamirsecretsharing::*;
 use aes_gcm::{Aes256Gcm, Key, Nonce}; 
 use aes_gcm::aead::{Aead, NewAead};
+use rsa::{PublicKey, RsaPrivateKey, PaddingScheme};
 use rand::Rng;
 
-fn encrypt_mnemonic(mnemonic: str) {
+fn encrypt_mnemonic(mnemonic: &str) {
     const NONCE_SIZE = 12;
     const KEY_SIZE = DATA_SIZE - NONCE_SIZE;
     let mut rng = rand::thread_rng();
@@ -16,5 +17,16 @@ fn encrypt_mnemonic(mnemonic: str) {
     let key = Key::from_slice(&key_and_nonce[0..KEY_SIZE]);
     let none = Nonce::from_slice(&key_and_nonce[KEY_SIZE..DATA_SIZE]);
     let cipher = Aes256Gcm::new(key);
-    let encrypted_mnemonic = cipher.encrypt(nonce, mnemonic);
+    let encrypted_mnemonic = cipher.encrypt(nonce, mnemonic).expect("encryption failure!");
+    return (key_and_nonce, encrypted_mnemonic);
+}
+
+fn create_key_shares(secret: &[u8], n: u8, k: u8) {
+    return create_shares(secret, n, k);
+}
+
+fn encrypt_share(share: &[u8], pub_key: &[u8]) {
+    let mut rng = rand::thread_rng();
+    let key = RsaPublicKey::from_pkcs1_der(pub_key);
+    return key.encrypt(&mut rng, PaddingScheme::new_pkcs1v15(), &share[..]);
 }
